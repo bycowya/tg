@@ -3,7 +3,7 @@ import re
 import os
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, FSInputFile
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils import executor
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
@@ -214,12 +214,14 @@ async def send_question(chat_id):
     q = QUESTIONS[state["step"]]
     attachment = q.get("attachment")
     if attachment:
+        photo = open(attachment, "rb")
         await bot.send_photo(
             chat_id,
-            photo=FSInputFile(attachment),
+            photo=photo,
             caption=q["text"],
             reply_markup=make_question_keyboard()
         )
+        photo.close()
     else:
         await bot.send_message(
             chat_id,
@@ -388,4 +390,4 @@ async def process_message(message: types.Message):
 
 
 if __name__ == "__main__":
-    executor.start_polling(dp, skip_updates=True)
+    main()
