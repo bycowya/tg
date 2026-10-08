@@ -3,7 +3,7 @@ import re
 import os
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, FSInputFile
 from aiogram.utils import executor
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
@@ -150,25 +150,25 @@ QUESTIONS = [
     },
     {
         "text": "Вопрос 14. Рассмотрите изображение медали «За оборону Сталинграда». Заполните пропуск в предложении: «Оборона, за участие в которой вручалась данная награда, началась в тысяча девятьсот _____ году».\n\n(Введите год цифрами)",
-        "attachment": "https://vk.ru/photo-242111878_457239022",
+        "attachment": "images/14.png",
         "correct_variants": ["1942", "сорок втором", "сорок второй"],
         "hint": "Пояснение: Оборона Сталинграда началась 17 июля 1942 года. Медаль «За оборону Сталинграда» была учреждена 22 декабря 1942 года и вручалась участникам обороны города."
     },
     {
         "text": "Вопрос 15. Рассмотрите изображение марки «30-летие разгрома фашистских войск под Курском». Укажите название месяца, когда началась битва, юбилею которой посвящена марка.\n\n(Введите название месяца)",
-        "attachment": "https://vk.ru/photo-242111878_457239023",
+        "attachment": "images/15.png",
         "correct_variants": ["июль"],
         "hint": "Пояснение: Курская битва началась 5 июля 1943 года. Марка, посвящённая 30-летию разгрома фашистских войск под Курском, была выпущена в 1973 году."
     },
     {
         "text": "Вопрос 16. Рассмотрите изображение марки «Сталинград — город герой». Заполните пропуск в предложении: «Битва, к которой непосредственно относится размещённое на марке изображение, окончилась в тысяча девятьсот _____ году».\n\n(Введите год цифрами)",
-        "attachment": "https://vk.ru/photo-242111878_457239024",
+        "attachment": "images/16.jpg",
         "correct_variants": ["1943", "сорок третьем", "сорок третий"],
         "hint": "Пояснение: Сталинградская битва завершилась 2 февраля 1943 года. Марка «Сталинград — город герой» посвящена этому событию."
     },
     {
         "text": "Вопрос 17. Рассмотрите изображение марки «30-летие разгрома фашистских войск под Ленинградом». Заполните пропуск в предложении: «Событие, юбилею которого посвящена данная марка, произошло в тысяча девятьсот _____ году».\n\n(Введите год цифрами)",
-        "attachment": "https://vk.ru/photo-242111878_457239025",
+        "attachment": "images/17.jpg",
         "correct_variants": ["1944", "сорок четвертом", "сорок четвёртый"],
         "hint": "Пояснение: Полное освобождение Ленинграда от блокады произошло 27 января 1944 года. Марка, посвящённая 30-летию этого события, была выпущена в 1974 году."
     },
@@ -216,7 +216,7 @@ async def send_question(chat_id):
     if attachment:
         await bot.send_photo(
             chat_id,
-            photo=attachment,
+            photo=FSInputFile(attachment),
             caption=q["text"],
             reply_markup=make_question_keyboard()
         )
